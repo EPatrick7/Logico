@@ -1,5 +1,6 @@
 from logico.calculator import *
 def set_vals(l: LogicInstance, keys, values):
+    """Sets the values of a given LogicInstance to be in the desired state."""
     i = 0
     for key in keys:
         l.variables[key] = values[i]
@@ -7,6 +8,7 @@ def set_vals(l: LogicInstance, keys, values):
 
 
 def input_statement(userinput) -> str:
+    """Cleans and prepares a user input into a equation input, replaces shortcuts with their meanings."""
     statement = userinput.strip().replace(" ", "")
 
     # → ∧ ∨ ¬ ↔ ⊕ ∃ ∀
@@ -58,17 +60,15 @@ def input_statement(userinput) -> str:
     while i in range(len(statement) - 1):
         if statement[i] == "¬" and statement[i + 1] == "(":
             snippit = "¬" + make_snippit(statement[i:])
-
-            # print(statement[i:],snippit,sep=" | ")
             statement = statement[:i] + "(" + snippit + ")" + statement[i + len(snippit):]
             i += len(snippit)
         i += 1
 
-    # print(statement)
     return statement
 
 
 def clean(instr) -> str:
+    """Helps to save some poorly formed logical equations by adding needed parenthesis."""
     output = instr
     i = 0
     while i in range(len(output) - 2):
@@ -86,6 +86,7 @@ def clean(instr) -> str:
     return output
 
 def crunch(statement, boolean_override):
+    """Given a Boolean Logic Equation, and if you want to force use 1/0 instead of T/F, returns a text output for the truth table."""
     to_print = ""
     statement2 = None
     finaloutput = []
@@ -185,7 +186,6 @@ def crunch(statement, boolean_override):
     while True in values:
         i = 0
         while i in range(len(values)):
-            # print(i,values[i])
             if not True in values[i:] and len(values[i:]) > 0:
                 values[i - 1] = False
                 for k in range(i, len(values)):

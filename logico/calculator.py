@@ -8,14 +8,16 @@ class LogicInstance():
         self.equation = self._parse(self._nested)
 
     def evaluate(self):
+        """Returns the truth value for the equation given current variable values."""
         return self.equation.evaluate()
 
     # → ∧ ∨ ¬ ↔ ⊕ ∃ ∀
     def _is_var(self, char: str) -> bool:
+        """Returns true if the character at hand is not any operator character"""
         return not char in "→∧∨¬↔⊕↓↑"
 
     def _get_nested(self, statement) -> [str, []]:
-        # print(statement)
+        """Isolates parenthesis groups in the input"""
         output = []
         optemp = []
 
@@ -43,11 +45,9 @@ class LogicInstance():
 
             if len(optemp) >= 3:
                 output.append(optemp[:3])
-                # print(optemp[:3],optemp[3:],output,sep="|")
                 optemp = optemp[3:]
 
             i += 1
-        # print(output)
         if len(optemp) > 0:
             output += optemp
             optemp = []
@@ -55,8 +55,8 @@ class LogicInstance():
 
     # → ∧ ∨ ¬ ↔ ⊕ ∃ ∀
     def _parse(self, nested):
+        """Converts a properly nested input into an operator object"""
         def subparse(sublevel):
-            # print(sublevel,len(sublevel),sep=" , ")
             if len(sublevel) == 1:
                 if type(sublevel) == list:
                     return subparse(sublevel[0])
@@ -93,4 +93,5 @@ class LogicInstance():
         return subparse(nested)
 
     def fetch_var(self, code):
+        """Returns the variable at the given ID"""
         return self.variables[code]
